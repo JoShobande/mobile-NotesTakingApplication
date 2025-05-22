@@ -9,19 +9,29 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function SignInScreen() {
+export default function SignUpScreen() {
   const router = useRouter();
 
-  const handleSignIn = () => {
-    // TODO: validate & call your auth API…
+  const handleSignUp = () => {
+    // TODO: validate & call your signup API…
     router.replace('/home'); // or '/'
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.card}>
-        <Text style={styles.title}>Welcome Back</Text>
+        <Text style={styles.title}>Create Account</Text>
 
+        <TextInput
+          style={styles.input}
+          placeholder="Frst Name"
+          placeholderTextColor="#999"
+        />
+         <TextInput
+          style={styles.input}
+          placeholder="Last Name"
+          placeholderTextColor="#999"
+        />
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -37,14 +47,14 @@ export default function SignInScreen() {
           secureTextEntry
         />
 
-        <TouchableOpacity style={styles.button} onPress={handleSignIn}>
-          <Text style={styles.buttonText}>Sign In</Text>
+        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+          <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Don’t have an account?</Text>
-          <Link href="/signup" style={styles.link}>
-            <Text style={styles.linkText}>Sign Up</Text>
+          <Text style={styles.footerText}>Already have an account?</Text>
+          <Link href="/signin" style={styles.link}>
+            <Text style={styles.linkText}>Sign In</Text>
           </Link>
         </View>
       </View>
@@ -52,13 +62,14 @@ export default function SignInScreen() {
   );
 }
 
+// reuse styles from SignInScreen (you can also extract to a shared file)
 const CARD_PADDING = 24;
 const BUTTON_HEIGHT = 48;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E5E7EB', // Tailwind gray-200
+    backgroundColor: '#E5E7EB',
     justifyContent: 'center',
     padding: 16,
   },
@@ -66,7 +77,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 16,
     padding: CARD_PADDING,
-    // shadow
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -82,12 +92,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginBottom: 24,
     textAlign: 'center',
-    color: '#111827', // gray-900
+    color: '#111827',
   },
   input: {
     height: 48,
     borderWidth: 1,
-    borderColor: '#D1D5DB', // gray-300
+    borderColor: '#D1D5DB',
     borderRadius: 8,
     paddingHorizontal: 12,
     marginBottom: 16,
@@ -113,7 +123,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   footerText: {
-    color: '#6B7280', // gray-500
+    color: '#6B7280',
     fontSize: 14,
   },
   link: {

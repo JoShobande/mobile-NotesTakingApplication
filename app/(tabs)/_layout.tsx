@@ -1,10 +1,10 @@
-import { Tabs } from 'expo-router';
+import { Tabs, useRouter } from 'expo-router';
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function TabLayout() {
-
+  const router = useRouter();
 
   return (
     <View style={styles.container}>
@@ -74,7 +74,7 @@ export default function TabLayout() {
       </Tabs>
       <TouchableOpacity
         style={styles.fab}
-        // onPress={() => router.push('/new')}
+        onPress={() => router.push('/newNote')}
       >
         <Ionicons name="add" size={32} color="white" />
       </TouchableOpacity>
