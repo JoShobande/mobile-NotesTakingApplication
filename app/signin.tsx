@@ -1,4 +1,6 @@
+import { useAuth } from '@/context/AuthContext';
 import { Link, useRouter } from 'expo-router';
+import { useState } from 'react';
 import {
   View,
   Text,
@@ -6,16 +8,29 @@ import {
   TouchableOpacity,
   StyleSheet,
   Platform,
+  ActivityIndicator
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SignInScreen() {
   const router = useRouter();
 
-  const handleSignIn = () => {
-    // TODO: validate & call your auth API…
-    router.replace('/home'); // or '/'
+  // const [loading, setLoading] = useState(false)
+  const[modalMessage, setModalMessage] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const {signIn, loading } = useAuth()
+
+  const handleSignIn = async() => {
+    try{
+      await signIn(email, password)
+    }catch(error){
+      setModalMessage(error)
+    }
   };
+
+  console.log(modalMessage)
 
   return (
     <SafeAreaView style={styles.container}>
@@ -28,6 +43,8 @@ export default function SignInScreen() {
           placeholderTextColor="#999"
           keyboardType="email-address"
           autoCapitalize="none"
+          value={email}
+          onChangeText={(value)=>setEmail(value)}
         />
 
         <TextInput
@@ -35,10 +52,18 @@ export default function SignInScreen() {
           placeholder="Password"
           placeholderTextColor="#999"
           secureTextEntry
+          value={password}
+          onChangeText={(value)=>setPassword(value)}
         />
 
         <TouchableOpacity style={styles.button} onPress={handleSignIn}>
-          <Text style={styles.buttonText}>Sign In</Text>
+          {
+            loading ?
+              <ActivityIndicator/>
+            :
+            <Text style={styles.buttonText}>Sign In</Text>
+          }
+          
         </TouchableOpacity>
 
         <View style={styles.footer}>

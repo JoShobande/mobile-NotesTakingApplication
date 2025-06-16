@@ -8,6 +8,8 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 
+import { AuthProvider, useAuth } from '../context/AuthContext';
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -28,13 +30,36 @@ export default function RootLayout() {
   }
 
   return (
+    <AuthProvider>
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="signin" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
+      {/* 3️⃣ Render either your auth flow or your app flow */}
+      <AuthGuard />
       <StatusBar style="auto" />
     </ThemeProvider>
+  </AuthProvider>
+  );
+}
+
+function AuthGuard() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    // still checking AsyncStorage → keep splash visible, or return null/a loader
+    return null;
+  }
+
+  return (
+    <Stack>
+      {user ? (
+        // if signed in, show your tabs
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      ) : (
+        // if not signed in, show the sign-in screen
+        <Stack.Screen name="signin" options={{ headerShown: false }} />
+      )}
+      {/* always register your signup and not-found screens */}
+      <Stack.Screen name="signup" options={{ headerShown: false }} />
+      <Stack.Screen name="+not-found" />
+    </Stack>
   );
 }
